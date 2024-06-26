@@ -12,7 +12,7 @@ import modelo.DatosUsuario;
 public class FrameLogin extends javax.swing.JFrame {
     
     private int xMouse, yMouse;
-    private UsuarioController usuarioController;
+    private final UsuarioController usuarioController;
 
     public FrameLogin() {
         
@@ -31,12 +31,11 @@ public class FrameLogin extends javax.swing.JFrame {
         
         DatosUsuario datosUsuario = new DatosUsuario(txtUsuario.getText(), String.valueOf(txtClave.getPassword()));
         
-        boolean usuarioExiste = this.usuarioController.validar(datosUsuario);
+        datosUsuario = this.usuarioController.validar(datosUsuario);
         
-        System.out.println(usuarioExiste);
-        
-        if (!usuarioExiste) {
-            JOptionPane.showMessageDialog(this, "Usuario no registrado");
+        if (!datosUsuario.isSuccess()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, datosUsuario.getMensage(), datosUsuario.isSuccess());
+            messageSuccess.setVisible(true);
             return;
         }  
         setVisible(false);

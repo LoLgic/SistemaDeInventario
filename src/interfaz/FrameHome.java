@@ -1,25 +1,35 @@
 
 package interfaz;
 
+import controller.ProductoController;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import modelo.DatosProducto;
 
 
 public class FrameHome extends javax.swing.JFrame {
     
     private int xMouse, yMouse;
     private DefaultTableModel model;
+    private final ProductoController productoController;
    
 
     public FrameHome() {
+        
+        this.productoController = new ProductoController();
         initComponents();
         
         this.setLocationRelativeTo(null);
     }
     
-    public void cargarTabla() {
+    public void cargarTablaCliente() {
         tbTabla.setVisible(false);
         model = new DefaultTableModel();
         model.addColumn("Documento");
@@ -36,14 +46,62 @@ public class FrameHome extends javax.swing.JFrame {
         model = new DefaultTableModel();
         model.addColumn("Id");
         model.addColumn("Nombre");
+        model.addColumn("Precio");
         model.addColumn("Cantidad");
         model.addColumn("Iva");
         model.addColumn("Descripción");
         model.addColumn("Categoría");
+        
+        
+        
+        
+        
+        List<DatosProducto> datosProductos = this.productoController.obtenerProductos();
+        
+        for (DatosProducto datosProducto : datosProductos) {
+            Object[] row = new Object[7];
+            row[0] = datosProducto.getId();
+            row[1] = datosProducto.getNombre();
+            row[2] = datosProducto.getPrecio();
+            row[3] = datosProducto.getCantidad();
+            row[4] = datosProducto.getIva();
+            row[5] = datosProducto.getDescripcion();
+            row[6] = datosProducto.getCategoria();
+            model.addRow(row);
+        }
         tbTabla.setModel(model);
         tbTabla.setVisible(true);
+        ajustarTamañoColumnas();
     }
     
+    
+    private void ajustarTamañoColumnas() {
+        
+         for (int i = 0; i < tbTabla.getColumnCount(); i++) {
+            packColumn(tbTabla, i, 2);
+        }   
+    }
+    
+    private void packColumn(JTable table, int vColIndex, int margin) {
+        TableColumn col = table.getColumnModel().getColumn(vColIndex);
+        int width;
+        
+        TableCellRenderer renderer = col.getHeaderRenderer();
+        if (renderer == null) {
+            renderer = table.getTableHeader().getDefaultRenderer();
+        }
+        Component comp = renderer.getTableCellRendererComponent(table, col.getHeaderValue(), false, false, 0, 0);
+        width = comp.getPreferredSize().width;
+        
+        for (int r = 0; r < table.getRowCount(); r++) {
+            renderer = table.getCellRenderer(r, vColIndex);
+            comp = renderer.getTableCellRendererComponent(table, table.getValueAt(r, vColIndex), false, false, r, vColIndex);
+            width = Math.max(width, comp.getPreferredSize().width);
+        }
+        
+        width += 2 * margin;
+        col.setPreferredWidth(width);
+    }
     private void headerMousePressed(MouseEvent evt) {
         xMouse = evt.getX();
         yMouse = evt.getY();
@@ -76,6 +134,8 @@ public class FrameHome extends javax.swing.JFrame {
         btnEliminarProd = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbTabla = new javax.swing.JTable();
+        lblNombreTabla = new javax.swing.JLabel();
+        separator = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -193,6 +253,11 @@ public class FrameHome extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnProductoMouseExited(evt);
+            }
+        });
+        btnProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductoActionPerformed(evt);
             }
         });
         jPanel3.add(btnProducto);
@@ -338,6 +403,7 @@ public class FrameHome extends javax.swing.JFrame {
         jPanel1.add(panelProducto);
         panelProducto.setBounds(180, 50, 180, 0);
 
+        tbTabla.setBackground(new java.awt.Color(242, 242, 242));
         tbTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -349,7 +415,17 @@ public class FrameHome extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tbTabla);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(0, 120, 1000, 404);
+        jScrollPane1.setBounds(0, 210, 1000, 404);
+
+        lblNombreTabla.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        lblNombreTabla.setForeground(new java.awt.Color(51, 51, 51));
+        lblNombreTabla.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(lblNombreTabla);
+        lblNombreTabla.setBounds(430, 120, 350, 50);
+
+        separator.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(separator);
+        separator.setBounds(430, 180, 350, 2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -469,8 +545,10 @@ public class FrameHome extends javax.swing.JFrame {
         //btnCliente.setBackground(Color.decode("#666666"));
         panelCliente.setSize(180, 60);
         panelProducto.setSize(0, 109);
+        lblNombreTabla.setText("TABLA CLIENTE");
+        separator.setBackground(Color.black);
         //btnProducto.setBackground(Color.decode("#333333"));
-        cargarTabla();
+        cargarTablaCliente();
     }//GEN-LAST:event_btnClienteMouseClicked
 
     private void btnProductoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProductoMouseEntered
@@ -517,6 +595,8 @@ public class FrameHome extends javax.swing.JFrame {
     private void btnProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProductoMouseClicked
         panelProducto.setSize(180, 60);
         panelCliente.setSize(0, 95);
+        lblNombreTabla.setText("TABLA PRODUCTO");
+        separator.setBackground(Color.black);
         //btnProducto.setBackground(Color.decode("#6666666"));
         //btnCliente.setBackground(Color.decode("#333333"));
         cargarTablaProducto();
@@ -540,6 +620,10 @@ public class FrameHome extends javax.swing.JFrame {
         lblUserInfo.setIcon(new ImageIcon(getClass().getResource("/img/user-circle-white.png")));
     }//GEN-LAST:event_lblUserInfoMouseExited
 
+    private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnProductoActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -554,9 +638,11 @@ public class FrameHome extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblNombreTabla;
     private javax.swing.JLabel lblUserInfo;
     private javax.swing.JPanel panelCliente;
     private javax.swing.JPanel panelProducto;
+    private javax.swing.JSeparator separator;
     private javax.swing.JTable tbTabla;
     // End of variables declaration//GEN-END:variables
 }

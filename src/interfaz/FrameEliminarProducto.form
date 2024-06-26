@@ -81,6 +81,7 @@
                               <Component id="btnElinimar" alignment="0" min="-2" pref="400" max="-2" attributes="0"/>
                               <Component id="lblTitulo" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="lblSubtitulo" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblMensaje" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -101,6 +102,8 @@
                   <Component id="lblId" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="txtId" min="-2" pref="40" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblMensaje" min="-2" pref="20" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnElinimar" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -252,6 +255,13 @@
               <Color blue="66" green="66" red="66" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Bienvenido, por favor ingresa el ID del producto a eliminar."/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblMensaje">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="4a" green="4a" red="de" type="rgb"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

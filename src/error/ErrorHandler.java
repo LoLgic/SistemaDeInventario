@@ -10,7 +10,7 @@ public class ErrorHandler {
     
     public static String handle(SQLException e) {
         if (e instanceof SQLIntegrityConstraintViolationException) {
-            return "Documento duplicado";
+            return "Este número de Documento ya está en uso";
         } else {
             return "Error de SQL: " + e.getMessage();
         }

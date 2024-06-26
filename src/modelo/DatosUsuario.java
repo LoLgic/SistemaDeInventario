@@ -10,8 +10,14 @@ public class DatosUsuario {
     private String celular;
     private String usuario;
     private String clave;
+    private boolean success;
+    private String mensage;
 
-    
+    public DatosUsuario(boolean success, String mensage) {
+        this.success = success;
+        this.mensage = mensage;
+    }
+
     public DatosUsuario(String usuario, String clave) {
         this.usuario = usuario;
         this.clave = clave;
@@ -72,6 +78,14 @@ public class DatosUsuario {
 
     public void setClave(String clave) {
         this.clave = clave;
+    }
+    
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getMensage() {
+        return mensage;
     }
    
     

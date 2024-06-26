@@ -4,9 +4,11 @@ package interfaz;
 import controller.UsuarioController;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 import modelo.DatosUsuario;
+import modelo.StatusRegistro;
 
 
 public class FrameRegister extends javax.swing.JFrame {
@@ -23,8 +25,9 @@ public class FrameRegister extends javax.swing.JFrame {
     }
     
     private void registrarUsuario() {
+        lblMesanjeDocumento.setText("");
         if (camposVacios()) {
-            mostrarMensajeCamposRequeridos();
+            JOptionPane.showMessageDialog(this, "Ingrese todos los datos.");
             return;
         }
         if (!longitudCampos()) {
@@ -35,19 +38,22 @@ public class FrameRegister extends javax.swing.JFrame {
         DatosUsuario datosUsuario = new DatosUsuario(txtNombre.getText(),  txtDocumento.getText(), txtCelular.getText(), txtUsuario.getText(),
                 String.valueOf(txtClave.getPassword()));
         
-        boolean usuarioCreado = this.usuarioController.registrar(datosUsuario);
-        if (!usuarioCreado) {
-            JOptionPane.showMessageDialog(this, "Ocurrio un error o el documento ya esta usado.");
+        StatusRegistro status = this.usuarioController.registrar(datosUsuario);
+        
+        if (!status.isSuccess()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+            messageSuccess.setVisible(true);
+            lblMesanjeDocumento.setText(status.getMensaje()); 
             return;
         }
+        //Icon icon = new javax.swing.ImageIcon(getClass().getResource("/img/check_icon.png"));
+        //JOptionPane.showMessageDialog(this, status.getMensaje(),"Success", JOptionPane.INFORMATION_MESSAGE,icon);
+        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        messageSuccess.setVisible(true);
         setVisible(false);
-        FrameLogin frameLogin = new FrameLogin();
-        frameLogin.setVisible(true);
+        FrameHome frameHome = new FrameHome();
+        frameHome.setVisible(true);
     }
-
-    private void mostrarMensajeCamposRequeridos() {
-        JOptionPane.showMessageDialog(this, "Ingrese todos los datos.");
-    }  
     
     private boolean longitudCampos() {
         return txtDocumento.getText().trim().length() == 10 && txtCelular.getText().trim().length() == 9;
@@ -106,6 +112,7 @@ public class FrameRegister extends javax.swing.JFrame {
         lblAtras = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         lblSubtitulo = new javax.swing.JLabel();
+        lblMesanjeDocumento = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -161,9 +168,7 @@ public class FrameRegister extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(lblImagenLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(lblImagenLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 623, Short.MAX_VALUE)
         );
 
         lblDocumento.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -227,6 +232,7 @@ public class FrameRegister extends javax.swing.JFrame {
         btnMini.setBorder(null);
         btnMini.setFocusable(false);
         btnMini.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMini.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnMini.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnMiniMouseEntered(evt);
@@ -291,12 +297,16 @@ public class FrameRegister extends javax.swing.JFrame {
         lblAtras.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblAtras.setForeground(new java.awt.Color(51, 51, 51));
         lblAtras.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icon_atras.png"))); // NOI18N
-        lblAtras.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 51, 51), 4, true));
-        lblAtras.setPreferredSize(new java.awt.Dimension(30, 30));
+        lblAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icon_back_black.png"))); // NOI18N
         lblAtras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblAtrasMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblAtrasMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblAtrasMouseExited(evt);
             }
         });
 
@@ -308,13 +318,15 @@ public class FrameRegister extends javax.swing.JFrame {
         lblSubtitulo.setForeground(new java.awt.Color(102, 102, 102));
         lblSubtitulo.setText("Por favor ingresa tus datos para registrarte");
 
+        lblMesanjeDocumento.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAtras)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 819, Short.MAX_VALUE)
                 .addComponent(btnMini, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -322,7 +334,9 @@ public class FrameRegister extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(81, 81, 81)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMesanjeDocumento)
+                .addGap(72, 72, 72)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblUsuario)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -350,40 +364,43 @@ public class FrameRegister extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblAtras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblAtras)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblTitulo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblSubtitulo)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblNombre)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblDocumento)
+                                    .addComponent(lblCelular))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(40, 40, 40)
+                                .addComponent(lblUsuario)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblClave)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(42, 42, 42)
+                                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnMini, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
-                        .addComponent(lblTitulo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblSubtitulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblNombre)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblDocumento)
-                            .addComponent(lblCelular))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(lblUsuario)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblClave)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(58, 58, 58))))
+                        .addComponent(lblMesanjeDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(323, 323, 323))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -516,6 +533,14 @@ public class FrameRegister extends javax.swing.JFrame {
     private void btnRegistrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseExited
     }//GEN-LAST:event_btnRegistrarMouseExited
 
+    private void lblAtrasMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAtrasMouseEntered
+        lblAtras.setIcon(new ImageIcon(getClass().getResource("/img/icon_back_blackful.png")));
+    }//GEN-LAST:event_lblAtrasMouseEntered
+
+    private void lblAtrasMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAtrasMouseExited
+        lblAtras.setIcon(new ImageIcon(getClass().getResource("/img/icon_back_black.png")));
+    }//GEN-LAST:event_lblAtrasMouseExited
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -529,6 +554,7 @@ public class FrameRegister extends javax.swing.JFrame {
     private javax.swing.JLabel lblClave;
     private javax.swing.JLabel lblDocumento;
     private javax.swing.JLabel lblImagenLogin;
+    private javax.swing.JLabel lblMesanjeDocumento;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTitulo;

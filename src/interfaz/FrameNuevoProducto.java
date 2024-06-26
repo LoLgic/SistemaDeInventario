@@ -1,19 +1,68 @@
 
 package interfaz;
 
+import controller.ProductoController;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
+import modelo.DatosProducto;
+import modelo.StatusProducto;
 
 
 public class FrameNuevoProducto extends javax.swing.JFrame {
     
     private int xMouse, yMouse;
+    private final ProductoController productoController;
 
     public FrameNuevoProducto() {
+   
+        this.productoController = new ProductoController();
+   
         initComponents();
         
         this.setLocationRelativeTo(null);
+    }
+    
+    private void agregarProducto() {
+        if (camposVacios()) {
+            JOptionPane.showMessageDialog(this, "Ingrese todos los datos.");
+            return;
+        }
+        
+        DatosProducto datosProducto = new DatosProducto(txtNombre.getText(), txtPrecio.getText(), txtCantidad.getText(),
+                txtIva.getText(), txtDescipcion.getText(), txtCategoria.getText());
+        
+        StatusProducto status = this.productoController.agregar(datosProducto);
+        
+        if (!status.isSuccess()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+            messageSuccess.setVisible(true);
+        }
+        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        messageSuccess.setVisible(true);
+        limpiarInput();
+        
+    }
+    
+    private void limpiarInput() {
+        txtNombre.setText("");
+        txtCantidad.setText("");
+        txtPrecio.setText("");
+        txtIva.setText("");
+        txtDescipcion.setText("");
+        txtCategoria.setText("");
+        txtNombre.requestFocus();
+    }
+    
+    private boolean camposVacios() {
+        String nombre = txtNombre.getText().trim();
+        String precio = txtPrecio.getText().trim();
+        String cantidad = txtCantidad.getText().trim();
+        String iva = txtIva.getText().trim();
+        String descripcion = txtDescipcion.getText().trim();
+        String categoria = txtCategoria.getText().trim();
+        return nombre.isEmpty() || precio.isEmpty() || cantidad.isEmpty() || iva.isEmpty() || descripcion.isEmpty() || categoria.isEmpty();   
     }
     
     private void inputBorderReset() {
@@ -160,7 +209,7 @@ public class FrameNuevoProducto extends javax.swing.JFrame {
 
         lblSubtitulo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSubtitulo.setForeground(new java.awt.Color(102, 102, 102));
-        lblSubtitulo.setText("Bienvenido, por favor ingresa tus datos.");
+        lblSubtitulo.setText("Bienvenido, por favor ingresa los datos del producto.");
 
         lblCantidad.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblCantidad.setForeground(new java.awt.Color(51, 51, 51));
@@ -349,7 +398,7 @@ public class FrameNuevoProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+        agregarProducto();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseEntered
@@ -405,7 +454,6 @@ public class FrameNuevoProducto extends javax.swing.JFrame {
         
         if (!Character.isDigit(key)) {
             evt.consume();
-            return;
         }    
     }//GEN-LAST:event_txtCantidadKeyTyped
 
@@ -414,7 +462,6 @@ public class FrameNuevoProducto extends javax.swing.JFrame {
         
         if (!Character.isDigit(key)) {
             evt.consume();
-            return;
         }
     }//GEN-LAST:event_txtPrecioKeyTyped
 
@@ -423,7 +470,6 @@ public class FrameNuevoProducto extends javax.swing.JFrame {
         
         if (!Character.isDigit(key)) {
             evt.consume();
-            return;
         }
     }//GEN-LAST:event_txtIvaKeyTyped
 
@@ -450,4 +496,6 @@ public class FrameNuevoProducto extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
+
+    
 }

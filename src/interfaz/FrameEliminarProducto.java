@@ -1,22 +1,51 @@
 
 package interfaz;
 
+import controller.ProductoController;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.border.LineBorder;
+import modelo.DatosProducto;
+import modelo.StatusProducto;
 
 
 public class FrameEliminarProducto extends javax.swing.JFrame {
     
     private int xMouse, yMouse;
-
+    private final ProductoController productoController;
+    
     public FrameEliminarProducto() {
+        
+        this.productoController = new ProductoController();
         initComponents();
         
         this.setLocationRelativeTo(null);
-        
-           
+ 
     }
+    
+    private void eliminarProducto() {
+        lblMensaje.setText("");
+        String id = txtId.getText().trim();
+        if (id.isEmpty()) {
+            lblMensaje.setText("Ingrese el ID del producto");
+            return;
+        }
+        
+        DatosProducto datosProducto = new DatosProducto(Integer.parseInt(id));
+        
+        StatusProducto status = this.productoController.eliminar(datosProducto);
+        
+        if (!status.isSuccess()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+            messageSuccess.setVisible(true);
+            return;
+        }
+        
+        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        messageSuccess.setVisible(true);
+        txtId.setText("");
+    }
+    
     
     
     private void headerMousePressed(MouseEvent evt) {
@@ -45,6 +74,7 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
         btnElinimar = new javax.swing.JButton();
         lblTitulo = new javax.swing.JLabel();
         lblSubtitulo = new javax.swing.JLabel();
+        lblMensaje = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -154,6 +184,8 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
         lblSubtitulo.setForeground(new java.awt.Color(102, 102, 102));
         lblSubtitulo.setText("Bienvenido, por favor ingresa el ID del producto a eliminar.");
 
+        lblMensaje.setForeground(new java.awt.Color(222, 74, 74));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -172,7 +204,8 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
                             .addComponent(lblId)
                             .addComponent(btnElinimar, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblTitulo)
-                            .addComponent(lblSubtitulo))
+                            .addComponent(lblSubtitulo)
+                            .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -188,6 +221,8 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
                 .addComponent(lblId)
                 .addGap(18, 18, 18)
                 .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnElinimar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -231,7 +266,7 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void btnElinimarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElinimarActionPerformed
-        // TODO add your handling code here:
+        eliminarProducto();
     }//GEN-LAST:event_btnElinimarActionPerformed
 
     private void btnExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseEntered
@@ -257,12 +292,11 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
         
         if (!Character.isDigit(key)) {
             evt.consume();
-            return;
         }     
         
-        if (txtId.getText().trim().length() == 10) {
-            evt.consume();
-        } 
+//        if (txtId.getText().trim().length() == 10) {
+//            evt.consume();
+//        } 
         
     }//GEN-LAST:event_txtIdKeyTyped
 
@@ -281,6 +315,7 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblImagenLogin;
+    private javax.swing.JLabel lblMensaje;
     private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtId;

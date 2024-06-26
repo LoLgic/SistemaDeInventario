@@ -1,12 +1,13 @@
 
 package dao;
 
+import error.ErrorHandler;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import modelo.DatosUsuario;
+import modelo.StatusRegistro;
 
 
 public class UsuarioDAO {
@@ -16,9 +17,8 @@ public class UsuarioDAO {
     public UsuarioDAO(Connection con) {
         this.con = con;
     }
-
-    public boolean validar(DatosUsuario datosUsuario) {
-        boolean usuarioExiste = false;
+    
+    public DatosUsuario validar(DatosUsuario datosUsuario) {
         String sql = "SELECT COUNT(*) FROM usuarios WHERE"
                 + " usuario = BINARY ?"
                 + " AND clave = BINARY ?";
@@ -30,16 +30,20 @@ public class UsuarioDAO {
             try (ResultSet resultSet = statement.executeQuery()){
                 if (resultSet.next()) {
                     int count = resultSet.getInt(1);
-                    usuarioExiste = count > 0;
+                    if (count > 0) {
+                        return new DatosUsuario(true, "");
+                    }
                 }
             }
+            return new DatosUsuario(false, "Usuario o clave incorrecta.");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return usuarioExiste;
+        
     }
 
-    public boolean registrar(DatosUsuario datosUsuario) {
+
+    public StatusRegistro registrar(DatosUsuario datosUsuario) {
         String sql = "INSERT INTO usuarios"
                 + "(nombre, documento, celular, usuario, clave)"
                 + "VALUES (?,?,?,?,?)";
@@ -52,15 +56,13 @@ public class UsuarioDAO {
             
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                return true;
+                return new StatusRegistro(true, "Usuario registrado exitosamente.");
             }
-        } catch (SQLIntegrityConstraintViolationException e) {
-            //throw new RuntimeException("Duplicaste documento."); 
-            //System.out.println("Duplicas el documento");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            String mensaje = ErrorHandler.handle(e);
+            return new StatusRegistro(false, mensaje);
         }
-        return false;
+        return new StatusRegistro(false, "Error desconocido al registrar el usuario.");
     }
     
 }

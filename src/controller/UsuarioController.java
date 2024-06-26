@@ -4,6 +4,7 @@ package controller;
 import conexion.Conexion;
 import dao.UsuarioDAO;
 import modelo.DatosUsuario;
+import modelo.StatusRegistro;
 
 
 public class UsuarioController {
@@ -15,11 +16,11 @@ public class UsuarioController {
         this.usuarioDAO = new UsuarioDAO(conexion.recuperaConexion());
     }
     
-    public boolean validar(DatosUsuario datosUsuario) {
+    public DatosUsuario validar(DatosUsuario datosUsuario) {
         return usuarioDAO.validar(datosUsuario);
     }
 
-    public boolean registrar(DatosUsuario datosUsuario) {
+    public StatusRegistro registrar(DatosUsuario datosUsuario) {
         return usuarioDAO.registrar(datosUsuario);
     }
     
