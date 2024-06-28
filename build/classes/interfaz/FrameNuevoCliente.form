@@ -73,8 +73,8 @@
                           <Component id="btnExit" min="-2" pref="60" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="112" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="lblSubtitulo" min="-2" max="-2" attributes="0"/>
                               <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
@@ -89,23 +89,21 @@
                                       <Component id="txtApellido" min="-2" pref="200" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="txtEmail" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
+                              <Component id="txtEmail" alignment="0" pref="420" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblTelefono" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="139" max="-2" attributes="0"/>
                                   <Component id="lblDocumento" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="btnRegistrar" alignment="0" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="txtTelefono" min="-2" pref="200" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="txtDocumento" min="-2" pref="200" max="-2" attributes="0"/>
-                                  </Group>
+                              <Component id="btnRegistrar" alignment="0" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="txtCelular" min="-2" pref="200" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="txtDocumento" min="-2" pref="200" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="lblValidar" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                              <Component id="lblMensaje" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="145" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="106" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -117,7 +115,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnExit" min="-2" pref="30" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="lblSubtitulo" min="-2" max="-2" attributes="0"/>
@@ -136,7 +134,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="txtEmail" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblValidar" min="-2" pref="20" max="-2" attributes="0"/>
+                  <Component id="lblMensaje" min="-2" pref="20" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblTelefono" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -144,12 +142,12 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="txtTelefono" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="txtCelular" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                       <Component id="txtDocumento" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnRegistrar" min="-2" pref="40" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
               </Group>
               <Component id="jPanel2" alignment="1" pref="671" max="32767" attributes="0"/>
           </Group>
@@ -361,10 +359,10 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Telefono"/>
+            <Property name="text" type="java.lang.String" value="Celular"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtTelefono">
+        <Component class="javax.swing.JTextField" name="txtCelular">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="0"/>
@@ -378,9 +376,9 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtTelefonoMouseClicked"/>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTelefonoActionPerformed"/>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTelefonoKeyTyped"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="txtCelularMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCelularActionPerformed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCelularKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblDocumento">
@@ -414,7 +412,7 @@
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDocumentoKeyTyped"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblValidar">
+        <Component class="javax.swing.JLabel" name="lblMensaje">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="ff" type="rgb"/>

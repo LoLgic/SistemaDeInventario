@@ -8,8 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import modelo.DatosProducto;
-import modelo.StatusProducto;
+import modelo.producto.DatosEliminarProducto;
+import modelo.producto.DatosListadoProducto;
+import modelo.producto.DatosRegistroProducto;
+import modelo.producto.DatosRespuestaProducto;
 
 
 public class ProductoDAO {
@@ -21,9 +23,9 @@ public class ProductoDAO {
     }
     
     
-    public List<DatosProducto> obtenerProductos() {
-        List<DatosProducto> datosProductos;
-        datosProductos = new ArrayList<>();
+    public List<DatosListadoProducto> obtenerProductos() {
+        List<DatosListadoProducto> listadoProductos;
+        listadoProductos = new ArrayList<>();
         
         String sql = "SELECT * FROM productos";
         
@@ -39,16 +41,16 @@ public class ProductoDAO {
                 String descripcion = resultSet.getString("descripcion");
                 String categoria = resultSet.getString("categoria");
                 
-                DatosProducto datosProducto = new DatosProducto(id, nombre, precio, cantidad, iva, descripcion, categoria);
-                datosProductos.add(datosProducto);
+                DatosListadoProducto listadoProducto = new DatosListadoProducto(id, nombre, precio, cantidad, iva, descripcion, categoria);
+                listadoProductos.add(listadoProducto);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return datosProductos;   
+        return listadoProductos;   
     } 
 
-    public StatusProducto agregar(DatosProducto datosProducto) {
+    public DatosRespuestaProducto agregar(DatosRegistroProducto datosProducto) {
         String sql = "INSERT INTO productos"
                 + "(nombre, precio, cantidad, iva, descripcion, categoria)"
                 + "VALUES (?,?,?,?,?,?)";
@@ -62,18 +64,18 @@ public class ProductoDAO {
             
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                return new StatusProducto(true,"Producto agregado exitosamente.");
+                return new DatosRespuestaProducto(true,"Producto agregado exitosamente.");
             }
         } catch (SQLException e) {
             String mensaje = ErrorHandler.handle(e);
-            return new StatusProducto(false, mensaje);
+            return new DatosRespuestaProducto(false, mensaje);
         }
-        return new StatusProducto(false, "Error desconocido al registrar el usuario.");
+        return new DatosRespuestaProducto(false, "Error desconocido al registrar el usuario.");
     }
 
    
     
-    public StatusProducto eliminar(DatosProducto datosProducto) {
+    public DatosRespuestaProducto eliminar(DatosEliminarProducto datosProducto) {
         String sql = "DELETE FROM productos WHERE id = ?";
 
         try (PreparedStatement statement = con.prepareStatement(sql)) {
@@ -81,14 +83,14 @@ public class ProductoDAO {
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                return new StatusProducto(true, "Producto eliminado.");
+                return new DatosRespuestaProducto(true, "Producto eliminado.");
             } else {
-                return new StatusProducto(false, "No se encontró ningún producto con el id proporcionado.");
+                return new DatosRespuestaProducto(false, "No se encontró ningún producto con el id proporcionado.");
             }
             
         } catch (SQLException e) {
             String mensaje = ErrorHandler.handle(e);
-            return new StatusProducto(false, mensaje);
+            return new DatosRespuestaProducto(false, mensaje);
         }
     }
 }

@@ -76,19 +76,22 @@
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Component id="lblMesanjeDocumento" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lblClave" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblSubtitulo" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="lblClave" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="lblNombre" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="txtNombre" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblDocumento" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtDocumento" min="-2" pref="200" max="-2" attributes="0"/>
+                          <Component id="txtUsuario" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtClave" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnRegistrar" alignment="0" pref="420" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="lblDocumento" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtDocumento" alignment="0" pref="206" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -96,12 +99,8 @@
                                   <Component id="txtCelular" min="-2" pref="200" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="txtUsuario" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtClave" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnRegistrar" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
+                          <Component id="lblMesanjeDocumento" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblSubtitulo" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
@@ -134,7 +133,9 @@
                                       <Component id="txtDocumento" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                                       <Component id="txtCelular" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="40" pref="40" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                                  <Component id="lblMesanjeDocumento" min="-2" pref="20" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                                   <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="txtUsuario" min="-2" pref="40" max="-2" attributes="0"/>
@@ -153,9 +154,7 @@
                               <Component id="btnExit" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="btnMini" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="lblMesanjeDocumento" min="-2" pref="20" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="323" max="-2" attributes="0"/>
+                          <EmptySpace min="323" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>

@@ -1,6 +1,7 @@
 
 package interfaz;
 
+import controller.ClienteController;
 import controller.ProductoController;
 import java.awt.Color;
 import java.awt.Component;
@@ -11,7 +12,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import modelo.DatosProducto;
+import modelo.cliente.DatosListadoCliente;
+import modelo.producto.DatosListadoProducto;
 
 
 public class FrameHome extends javax.swing.JFrame {
@@ -19,11 +21,13 @@ public class FrameHome extends javax.swing.JFrame {
     private int xMouse, yMouse;
     private DefaultTableModel model;
     private final ProductoController productoController;
+    private final ClienteController clienteController;
    
 
     public FrameHome() {
         
         this.productoController = new ProductoController();
+        this.clienteController = new ClienteController();
         initComponents();
         
         this.setLocationRelativeTo(null);
@@ -32,13 +36,29 @@ public class FrameHome extends javax.swing.JFrame {
     public void cargarTablaCliente() {
         tbTabla.setVisible(false);
         model = new DefaultTableModel();
-        model.addColumn("Documento");
+        model.addColumn("id");
         model.addColumn("Nombre");
         model.addColumn("Apellido");
         model.addColumn("Email");
-        model.addColumn("Teléfono");
+        model.addColumn("Celular");
+        model.addColumn("Documento");
+        
+        List<DatosListadoCliente> datosClientes = this.clienteController.obtenerCliente();
+        
+        for (DatosListadoCliente datosCliente : datosClientes) {
+            Object[] row = new Object[6];
+            row[0] = datosCliente.getId();
+            row[1] = datosCliente.getNombre();
+            row[2] = datosCliente.getApellido();
+            row[3] =  datosCliente.getEmail();
+            row[4] = datosCliente.getCelular();
+            row[5] = datosCliente.getDocumento();
+            model.addRow(row);
+        }
         tbTabla.setModel(model);
         tbTabla.setVisible(true);
+         ajustarTamañoColumnas();
+        
     }
     
     public void cargarTablaProducto() {
@@ -51,14 +71,10 @@ public class FrameHome extends javax.swing.JFrame {
         model.addColumn("Iva");
         model.addColumn("Descripción");
         model.addColumn("Categoría");
+
+        List<DatosListadoProducto> datosProductos = this.productoController.obtenerProductos();
         
-        
-        
-        
-        
-        List<DatosProducto> datosProductos = this.productoController.obtenerProductos();
-        
-        for (DatosProducto datosProducto : datosProductos) {
+        for (DatosListadoProducto datosProducto : datosProductos) {
             Object[] row = new Object[7];
             row[0] = datosProducto.getId();
             row[1] = datosProducto.getNombre();

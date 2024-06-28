@@ -1,6 +1,7 @@
 
 package interfaz;
 
+import controller.ClienteController;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.regex.Matcher;
@@ -8,6 +9,8 @@ import java.util.regex.Pattern;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import modelo.cliente.DatosRegistrarCliente;
+import modelo.cliente.DatosRespuestaCliente;
 
 
 public class FrameNuevoCliente extends javax.swing.JFrame {
@@ -15,14 +18,69 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
     private int xMouse, yMouse;
     private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
     private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    private final ClienteController clienteController;
+    private boolean isEmailValid;
     
     public FrameNuevoCliente() {
+        this.clienteController = new ClienteController();
         initComponents();
         this.setLocationRelativeTo(null);
         EmailValidation();
     }
     
+    private void registrarCliente() {
+        
+        if (camposVacios()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, "Ingrese todos los datos.", false);
+            messageSuccess.setVisible(true);
+            return;
+        }
+        
+        if (!longitudCampos()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, "Los campos Documeto son de 10 digitos y Celular 9 digitos.", false);
+            messageSuccess.setVisible(true);
+            return;
+        }
+        if (!isEmailValid) {
+            return;
+        }
+        DatosRegistrarCliente datosCliente = new DatosRegistrarCliente(txtNombre.getText(), txtApellido.getText(), txtEmail.getText(), txtCelular.getText(),
+                txtDocumento.getText());
+        
+        DatosRespuestaCliente respuesta = this.clienteController.registrar(datosCliente);
+        
+        if (!respuesta.isStatus()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
+            messageSuccess.setVisible(true);
+            return;
+        }
+        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
+        messageSuccess.setVisible(true);
+        limpiarInput();
+        
+    }
+       
+    private void limpiarInput() {
+        txtNombre.setText("");
+        txtApellido.setText("");
+        txtEmail.setText("");
+        txtCelular.setText("");
+        txtDocumento.setText("");
+        lblMensaje.setText("");
+    }
     
+    private boolean longitudCampos() {
+        return txtDocumento.getText().trim().length() == 10 && txtCelular.getText().trim().length() == 9;
+    }
+    
+    private boolean camposVacios() {
+        String nombre = txtNombre.getText().trim();
+        String apellido = txtApellido.getText().trim();
+        String email = txtEmail.getText().trim();
+        String celular = txtCelular.getText().trim();
+        String documento = txtDocumento.getText().trim();
+        return nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || celular.isEmpty() || documento.isEmpty();
+    }
     
     public void EmailValidation() {
         txtEmail.getDocument().addDocumentListener(new DocumentListener() {
@@ -45,10 +103,12 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
             private void validationEmail() {
                 String emailText = txtEmail.getText();
                 if (validate(emailText)) {
-                    lblValidar.setText(" ");
+                    lblMensaje.setText("");
+                    isEmailValid = true;
                 } else {
-                    lblValidar.setText("Invalid email");
-                    lblValidar.setForeground(Color.RED);
+                    lblMensaje.setText("Invalid email");
+                    lblMensaje.setForeground(Color.RED);
+                    isEmailValid = false;
                 }
             }
         });
@@ -63,7 +123,7 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
         txtNombre.setBorder(new LineBorder(Color.decode("333333")));
         txtApellido.setBorder(new LineBorder(Color.decode("333333")));
         txtEmail.setBorder(new LineBorder(Color.decode("333333")));
-        txtTelefono.setBorder(new LineBorder(Color.decode("333333")));
+        txtCelular.setBorder(new LineBorder(Color.decode("333333")));
         txtDocumento.setBorder(new LineBorder(Color.decode("333333")));
     }
     
@@ -98,10 +158,10 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
         lblEmail = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         lblTelefono = new javax.swing.JLabel();
-        txtTelefono = new javax.swing.JTextField();
+        txtCelular = new javax.swing.JTextField();
         lblDocumento = new javax.swing.JLabel();
         txtDocumento = new javax.swing.JTextField();
-        lblValidar = new javax.swing.JLabel();
+        lblMensaje = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -238,23 +298,23 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
         });
 
         lblTelefono.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblTelefono.setText("Telefono");
+        lblTelefono.setText("Celular");
 
-        txtTelefono.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        txtTelefono.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-        txtTelefono.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtCelular.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtCelular.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        txtCelular.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtTelefonoMouseClicked(evt);
+                txtCelularMouseClicked(evt);
             }
         });
-        txtTelefono.addActionListener(new java.awt.event.ActionListener() {
+        txtCelular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTelefonoActionPerformed(evt);
+                txtCelularActionPerformed(evt);
             }
         });
-        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtCelular.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtTelefonoKeyTyped(evt);
+                txtCelularKeyTyped(evt);
             }
         });
 
@@ -281,7 +341,7 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
             }
         });
 
-        lblValidar.setBackground(new java.awt.Color(255, 0, 0));
+        lblMensaje.setBackground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -294,8 +354,8 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(112, 112, 112)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblSubtitulo)
                             .addComponent(lblTitulo)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -307,7 +367,7 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblApellido)
                                     .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblTelefono)
                                 .addGap(139, 139, 139)
@@ -315,11 +375,11 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(btnRegistrar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
                                     .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(lblValidar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 145, Short.MAX_VALUE)))
+                            .addComponent(lblMensaje, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 106, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -327,7 +387,7 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblTitulo)
                 .addGap(18, 18, 18)
                 .addComponent(lblSubtitulo)
@@ -344,18 +404,18 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblValidar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTelefono)
                     .addComponent(lblDocumento))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(90, 90, 90))
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
         );
 
@@ -396,7 +456,7 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        
+        registrarCliente();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseEntered
@@ -441,27 +501,27 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
         txtEmail.setBorder(new LineBorder(Color.blue));
     }//GEN-LAST:event_txtEmailMouseClicked
 
-    private void txtTelefonoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTelefonoMouseClicked
+    private void txtCelularMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCelularMouseClicked
         inputBorderReset();
-        txtTelefono.setBorder(new LineBorder(Color.blue));
-    }//GEN-LAST:event_txtTelefonoMouseClicked
+        txtCelular.setBorder(new LineBorder(Color.blue));
+    }//GEN-LAST:event_txtCelularMouseClicked
 
     private void txtDocumentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDocumentoMouseClicked
         inputBorderReset();
         txtDocumento.setBorder(new LineBorder(Color.blue));
     }//GEN-LAST:event_txtDocumentoMouseClicked
 
-    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+    private void txtCelularKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCelularKeyTyped
         char key = evt.getKeyChar();
         
         if (!Character.isDigit(key)) {
             evt.consume();
             return;
         }  
-        if (txtTelefono.getText().trim().length() == 9) {
+        if (txtCelular.getText().trim().length() == 9) {
             evt.consume();
         }
-    }//GEN-LAST:event_txtTelefonoKeyTyped
+    }//GEN-LAST:event_txtCelularKeyTyped
 
     private void txtDocumentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDocumentoKeyTyped
         char key = evt.getKeyChar();
@@ -473,15 +533,16 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
         if (txtDocumento.getText().trim().length() == 10) {
             evt.consume();
         }
+        
     }//GEN-LAST:event_txtDocumentoKeyTyped
 
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailActionPerformed
 
-    private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
+    private void txtCelularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCelularActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTelefonoActionPerformed
+    }//GEN-LAST:event_txtCelularActionPerformed
 
     
 
@@ -494,15 +555,15 @@ public class FrameNuevoCliente extends javax.swing.JFrame {
     private javax.swing.JLabel lblDocumento;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblImagenLogin;
+    private javax.swing.JLabel lblMensaje;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTelefono;
     private javax.swing.JLabel lblTitulo;
-    private javax.swing.JLabel lblValidar;
     private javax.swing.JTextField txtApellido;
+    private javax.swing.JTextField txtCelular;
     private javax.swing.JTextField txtDocumento;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

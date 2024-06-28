@@ -4,8 +4,10 @@ package controller;
 import conexion.Conexion;
 import dao.ProductoDAO;
 import java.util.List;
-import modelo.DatosProducto;
-import modelo.StatusProducto;
+import modelo.producto.DatosEliminarProducto;
+import modelo.producto.DatosListadoProducto;
+import modelo.producto.DatosRegistroProducto;
+import modelo.producto.DatosRespuestaProducto;
 
 
 public class ProductoController {
@@ -17,15 +19,15 @@ public class ProductoController {
         this.productoDAO = new ProductoDAO(conexion.recuperaConexion());
     }
     
-    public List<DatosProducto> obtenerProductos() {
+    public List<DatosListadoProducto> obtenerProductos() {
         return productoDAO.obtenerProductos();
     }
    
-    public StatusProducto agregar(DatosProducto datosProducto) {
+    public DatosRespuestaProducto agregar(DatosRegistroProducto datosProducto) {
         return productoDAO.agregar(datosProducto);
     }
     
-    public StatusProducto eliminar(DatosProducto datosProducto) {
+    public DatosRespuestaProducto eliminar(DatosEliminarProducto datosProducto) {
         return productoDAO.eliminar(datosProducto);
     } 
 }

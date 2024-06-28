@@ -6,8 +6,8 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
-import modelo.DatosProducto;
-import modelo.StatusProducto;
+import modelo.producto.DatosRegistroProducto;
+import modelo.producto.DatosRespuestaProducto;
 
 
 public class FrameNuevoProducto extends javax.swing.JFrame {
@@ -26,20 +26,20 @@ public class FrameNuevoProducto extends javax.swing.JFrame {
     
     private void agregarProducto() {
         if (camposVacios()) {
-            JOptionPane.showMessageDialog(this, "Ingrese todos los datos.");
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, "Ingrese todos los datos.", false);
+            messageSuccess.setVisible(true);
             return;
         }
-        
-        DatosProducto datosProducto = new DatosProducto(txtNombre.getText(), txtPrecio.getText(), txtCantidad.getText(),
+        DatosRegistroProducto datosProducto = new DatosRegistroProducto(txtNombre.getText(), txtPrecio.getText(), txtCantidad.getText(),
                 txtIva.getText(), txtDescipcion.getText(), txtCategoria.getText());
         
-        StatusProducto status = this.productoController.agregar(datosProducto);
+        DatosRespuestaProducto respuesta = this.productoController.agregar(datosProducto);
         
-        if (!status.isSuccess()) {
-            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        if (!respuesta.isStatus()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
             messageSuccess.setVisible(true);
         }
-        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
         messageSuccess.setVisible(true);
         limpiarInput();
         

@@ -4,9 +4,9 @@ package interfaz;
 import controller.UsuarioController;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
-import modelo.DatosUsuario;
+import modelo.usuario.DatosAutenticacionUsuario;
+import modelo.usuario.DatosRespuestaUsuario;
 
 
 public class FrameLogin extends javax.swing.JFrame {
@@ -25,16 +25,17 @@ public class FrameLogin extends javax.swing.JFrame {
     
     private void validarUsuario(){
         if (camposVacios()) {
-            mostrarMensajeCamposRequeridos();
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, "Los campos Nombre y Contraseña son requeridos.", false);
+            messageSuccess.setVisible(true);
             return;
         }
         
-        DatosUsuario datosUsuario = new DatosUsuario(txtUsuario.getText(), String.valueOf(txtClave.getPassword()));
+        DatosAutenticacionUsuario datosUsuario = new DatosAutenticacionUsuario(txtUsuario.getText(), String.valueOf(txtClave.getPassword()));
         
-        datosUsuario = this.usuarioController.validar(datosUsuario);
+        DatosRespuestaUsuario respuesta = this.usuarioController.validar(datosUsuario);
         
-        if (!datosUsuario.isSuccess()) {
-            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, datosUsuario.getMensage(), datosUsuario.isSuccess());
+        if (!respuesta.isStatus()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
             messageSuccess.setVisible(true);
             return;
         }  
@@ -42,10 +43,11 @@ public class FrameLogin extends javax.swing.JFrame {
         FrameHome frameHome = new FrameHome();
         frameHome.setVisible(true);
     }
-    
-    private void mostrarMensajeCamposRequeridos() {
-        JOptionPane.showMessageDialog(this, "Los campos Nombre y Contraseña son requeridos.");
-    }  
+//    *** MEJORA DEL CODIGO DIALOG MENSAGE ***  
+//    private void mostrarMensajeRequeridos(boolean valid, String mensaje) {
+//        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, mensaje, valid);
+//        messageSuccess.setVisible(true);
+//    }  
     
     private boolean camposVacios() {
         String usuario = txtUsuario.getText().trim();

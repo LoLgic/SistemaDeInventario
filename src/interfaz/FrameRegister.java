@@ -7,8 +7,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
-import modelo.DatosUsuario;
-import modelo.StatusRegistro;
+import modelo.usuario.DatosRegistroUsuario;
+import modelo.usuario.DatosRespuestaUsuario;
 
 
 public class FrameRegister extends javax.swing.JFrame {
@@ -27,28 +27,28 @@ public class FrameRegister extends javax.swing.JFrame {
     private void registrarUsuario() {
         lblMesanjeDocumento.setText("");
         if (camposVacios()) {
-            JOptionPane.showMessageDialog(this, "Ingrese todos los datos.");
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, "Ingrese todos los datos.", false);
+            messageSuccess.setVisible(true);
             return;
         }
         if (!longitudCampos()) {
-            JOptionPane.showMessageDialog(this, "Los campos Documeto son de 10 digitos y Celular 9 digitos");
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, "Los campos Documeto son de 10 digitos y Celular 9 digitos", false);
+            messageSuccess.setVisible(true);
             return;
         }
         
-        DatosUsuario datosUsuario = new DatosUsuario(txtNombre.getText(),  txtDocumento.getText(), txtCelular.getText(), txtUsuario.getText(),
+        DatosRegistroUsuario datosUsuario = new DatosRegistroUsuario(txtNombre.getText(),  txtDocumento.getText(), txtCelular.getText(), txtUsuario.getText(),
                 String.valueOf(txtClave.getPassword()));
         
-        StatusRegistro status = this.usuarioController.registrar(datosUsuario);
+        DatosRespuestaUsuario respuesta = this.usuarioController.registrar(datosUsuario);
         
-        if (!status.isSuccess()) {
-            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        if (!respuesta.isStatus()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
             messageSuccess.setVisible(true);
-            lblMesanjeDocumento.setText(status.getMensaje()); 
+            lblMesanjeDocumento.setText(respuesta.getMensaje()); 
             return;
         }
-        //Icon icon = new javax.swing.ImageIcon(getClass().getResource("/img/check_icon.png"));
-        //JOptionPane.showMessageDialog(this, status.getMensaje(),"Success", JOptionPane.INFORMATION_MESSAGE,icon);
-        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
         messageSuccess.setVisible(true);
         setVisible(false);
         FrameHome frameHome = new FrameHome();
@@ -334,28 +334,27 @@ public class FrameRegister extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblMesanjeDocumento)
-                .addGap(72, 72, 72)
+                .addGap(77, 77, 77)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblUsuario)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lblClave)
-                        .addComponent(lblNombre)
-                        .addComponent(txtNombre)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblDocumento)
-                                .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblTitulo)
+                    .addComponent(lblSubtitulo)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(lblClave, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtClave, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblDocumento, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtDocumento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(lblCelular)
                                 .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(txtUsuario)
-                        .addComponent(txtClave)
-                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblTitulo)
-                    .addComponent(lblSubtitulo))
+                        .addComponent(lblMesanjeDocumento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -383,7 +382,9 @@ public class FrameRegister extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(40, 40, 40)
+                                .addGap(11, 11, 11)
+                                .addComponent(lblMesanjeDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9)
                                 .addComponent(lblUsuario)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -398,9 +399,7 @@ public class FrameRegister extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnMini, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblMesanjeDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(323, 323, 323))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

@@ -1,19 +1,43 @@
 
 package interfaz;
 
+import controller.ClienteController;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.border.LineBorder;
+import modelo.cliente.DatosEliminarCliente;
+import modelo.cliente.DatosRespuestaCliente;
 
 
 public class FrameEliminarCliente extends javax.swing.JFrame {
-    
+    private final ClienteController clienteController;
     private int xMouse, yMouse;
 
     public FrameEliminarCliente() {
+        this.clienteController = new ClienteController();
         initComponents();
         
         this.setLocationRelativeTo(null);
+    }
+    
+    private void eliminarCliente() {
+        lblMensaje.setText("");
+        String id = txtId.getText().trim();
+        if (id.isEmpty()) {
+            lblMensaje.setText("Ingrese el ID del producto.");
+            return;
+        }
+        DatosEliminarCliente datosCliente = new DatosEliminarCliente(Integer.parseInt(id));
+        DatosRespuestaCliente respuesta = this.clienteController.eliminar(datosCliente);
+        
+        if (!respuesta.isStatus()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
+            messageSuccess.setVisible(true);
+            return;
+        }
+        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
+        messageSuccess.setVisible(true);
+        txtId.setText("");
     }
     
     
@@ -43,6 +67,7 @@ public class FrameEliminarCliente extends javax.swing.JFrame {
         btnElinimar = new javax.swing.JButton();
         lblTitulo = new javax.swing.JLabel();
         lblSubtitulo = new javax.swing.JLabel();
+        lblMensaje = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -157,6 +182,8 @@ public class FrameEliminarCliente extends javax.swing.JFrame {
         lblSubtitulo.setForeground(new java.awt.Color(102, 102, 102));
         lblSubtitulo.setText("Bienvenido, por favor ingresa el ID del cliente a eliminar.");
 
+        lblMensaje.setForeground(new java.awt.Color(222, 74, 74));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -175,7 +202,8 @@ public class FrameEliminarCliente extends javax.swing.JFrame {
                             .addComponent(lblId)
                             .addComponent(btnElinimar, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblTitulo)
-                            .addComponent(lblSubtitulo))
+                            .addComponent(lblSubtitulo)
+                            .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(159, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -191,6 +219,8 @@ public class FrameEliminarCliente extends javax.swing.JFrame {
                 .addComponent(lblId)
                 .addGap(18, 18, 18)
                 .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnElinimar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -234,7 +264,7 @@ public class FrameEliminarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void btnElinimarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElinimarActionPerformed
-        
+        eliminarCliente();
     }//GEN-LAST:event_btnElinimarActionPerformed
 
     private void btnExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseEntered
@@ -263,10 +293,6 @@ public class FrameEliminarCliente extends javax.swing.JFrame {
             return;
         }     
         
-        if (txtId.getText().trim().length() == 10) {
-            evt.consume();
-        } 
-        
     }//GEN-LAST:event_txtIdKeyTyped
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
@@ -288,6 +314,7 @@ public class FrameEliminarCliente extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblImagenLogin;
+    private javax.swing.JLabel lblMensaje;
     private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtId;

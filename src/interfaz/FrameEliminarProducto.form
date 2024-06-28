@@ -76,12 +76,14 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtId" min="-2" pref="400" max="-2" attributes="0"/>
                               <Component id="lblId" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="btnElinimar" alignment="0" min="-2" pref="400" max="-2" attributes="0"/>
                               <Component id="lblTitulo" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="lblSubtitulo" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblMensaje" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="lblMensaje" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtId" alignment="0" pref="400" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>

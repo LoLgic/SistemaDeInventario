@@ -5,8 +5,9 @@ import controller.ProductoController;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.border.LineBorder;
-import modelo.DatosProducto;
-import modelo.StatusProducto;
+import modelo.producto.DatosEliminarProducto;
+import modelo.producto.DatosRespuestaProducto;
+
 
 
 public class FrameEliminarProducto extends javax.swing.JFrame {
@@ -31,17 +32,17 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
             return;
         }
         
-        DatosProducto datosProducto = new DatosProducto(Integer.parseInt(id));
+        DatosEliminarProducto datosProducto = new DatosEliminarProducto(Integer.parseInt(id));
         
-        StatusProducto status = this.productoController.eliminar(datosProducto);
+        DatosRespuestaProducto respuesta = this.productoController.eliminar(datosProducto);
         
-        if (!status.isSuccess()) {
-            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        if (!respuesta.isStatus()) {
+            DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
             messageSuccess.setVisible(true);
             return;
         }
         
-        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, status.getMensaje(), status.isSuccess());
+        DialogMessageSuccess messageSuccess = new DialogMessageSuccess(this, true, respuesta.getMensaje(), respuesta.isStatus());
         messageSuccess.setVisible(true);
         txtId.setText("");
     }
@@ -200,12 +201,13 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblId)
                             .addComponent(btnElinimar, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblTitulo)
                             .addComponent(lblSubtitulo)
-                            .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(lblMensaje, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtId, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -293,10 +295,6 @@ public class FrameEliminarProducto extends javax.swing.JFrame {
         if (!Character.isDigit(key)) {
             evt.consume();
         }     
-        
-//        if (txtId.getText().trim().length() == 10) {
-//            evt.consume();
-//        } 
         
     }//GEN-LAST:event_txtIdKeyTyped
 
