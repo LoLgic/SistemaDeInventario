@@ -11,18 +11,14 @@
 - Agregar clientes
 - Eliminar clientes
 - Mostrar todos los clientes
+ ## GUI
+![wallpapers-sistema-inventario](https://github.com/LoLgic/SistemaDeInventario/assets/107512491/807c497f-33e4-4ec4-9d95-cf5bf653b288)
 
 ## Requisitos del Sistema
 Para ejecutar este proyecto, necesitarás:
 
 - JDK 1.8
 - `mysql-connector-j-8.3.0.jar`
-
-## Instalación
-(No se proporcionaron pasos específicos de instalación.)
-
-## Configuración
-(No se especificaron configuraciones especiales después de la instalación.)
 
 ## Uso
 El sistema de inventario permite realizar las siguientes acciones:
